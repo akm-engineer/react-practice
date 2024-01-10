@@ -2,14 +2,21 @@ import { useState } from "react";
 import data from "./data";
 
 export default function Accordian() {
+  // State for handling single selection
   const [selected, setSelected] = useState(null);
+
+  // State for enabling/disabling multiple selection mode
   const [toBeEnabled, setToBeEnabled] = useState(false);
+
+  // State for tracking multiple selected items
   const [multiple, setMultiple] = useState([]);
 
+  // Handle click for single selection mode
   const handleClick = (currentId) => {
     setSelected(currentId === selected ? null : currentId);
   };
 
+  // Handle click for multiple selection mode
   const handleMultipleSelection = (currentId) => {
     let copyMultiple = [...multiple];
     const findIndexOfMultiple = copyMultiple.indexOf(currentId);
@@ -25,7 +32,7 @@ export default function Accordian() {
         onClick={() => setToBeEnabled(!toBeEnabled)}
         className="bg-green-700 rounded-lg hover:opacity-95 p-3 my-4"
       >
-        Enable
+        {toBeEnabled ? "Multiple" : "Enable"}
       </button>
       <div>
         {data && data.length > 0 ? (
@@ -57,11 +64,6 @@ export default function Accordian() {
                       </p>
                     </div>
                   )}
-              {/* {selected === item.id ? (
-                <div>
-                  <p className="text-white  rounded-lg p-3 ">{item.answer}</p>
-                </div>
-              ) : null} */}
             </div>
           ))
         ) : (
