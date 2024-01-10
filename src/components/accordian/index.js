@@ -3,32 +3,65 @@ import data from "./data";
 
 export default function Accordian() {
   const [selected, setSelected] = useState(null);
+  const [toBeEnabled, setToBeEnabled] = useState(false);
+  const [multiple, setMultiple] = useState([]);
+
   const handleClick = (currentId) => {
     setSelected(currentId === selected ? null : currentId);
   };
+
+  const handleMultipleSelection = (currentId) => {
+    let copyMultiple = [...multiple];
+    const findIndexOfMultiple = copyMultiple.indexOf(currentId);
+
+    if (findIndexOfMultiple === -1) copyMultiple.push(currentId);
+    else copyMultiple.splice(findIndexOfMultiple, 1);
+
+    setMultiple(copyMultiple);
+  };
   return (
     <div className="text-xl font-semibold">
-      <button className="bg-green-700 rounded-lg hover:opacity-95 p-3 my-4">
+      <button
+        onClick={() => setToBeEnabled(!toBeEnabled)}
+        className="bg-green-700 rounded-lg hover:opacity-95 p-3 my-4"
+      >
         Enable
       </button>
       <div>
         {data && data.length > 0 ? (
           data.map((item) => (
-            <div className="my-5 max-w-[450px] mx-auto ">
+            <div className="bg-slate-700 rounded-lg my-5 max-w-[450px] mx-auto shadow-lg ">
               <div
-                className="bg-slate-700 rounded-lg gap-8 flex p-3 items-center justify-center"
-                onClick={() => handleClick(item.id)}
+                className="  flex p-3 items-center justify-between gap-8 cursor-pointer"
+                onClick={
+                  toBeEnabled
+                    ? () => handleMultipleSelection(item.id)
+                    : () => handleClick(item.id)
+                }
               >
                 <h3 className="text-white">{item.question}</h3>
                 <span className="text-white text-lg cursor-pointer">+</span>
               </div>
-              {selected === item.id ? (
+              {toBeEnabled
+                ? multiple.indexOf(item.id) !== -1 && (
+                    <div>
+                      <p className="text-white  rounded-lg p-3 ">
+                        {item.answer}
+                      </p>
+                    </div>
+                  )
+                : selected === item.id && (
+                    <div>
+                      <p className="text-white  rounded-lg p-3 ">
+                        {item.answer}
+                      </p>
+                    </div>
+                  )}
+              {/* {selected === item.id ? (
                 <div>
-                  <p className="text-white bg-slate-400 rounded-lg p-3 my-2">
-                    {item.answer}
-                  </p>
+                  <p className="text-white  rounded-lg p-3 ">{item.answer}</p>
                 </div>
-              ) : null}
+              ) : null} */}
             </div>
           ))
         ) : (
